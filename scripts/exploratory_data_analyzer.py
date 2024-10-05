@@ -24,13 +24,13 @@ class EDAAnalyzer:
         print(f"The data has a shape of: {self.data.shape}")
 
         # print out the column info
-        self.data.info()
+        print(self.data.info())
 
     def summary_statistics(self):
         """
         A function that generates 5 number summary(descriptive statistics) of the dataframe
         """
-        self.data.describe()
+        print(self.data.describe())
     
     def missing_values(self):
         """
