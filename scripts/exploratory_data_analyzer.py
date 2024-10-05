@@ -20,7 +20,12 @@ class EDAAnalyzer:
         """
         A function that creates basic overview of the data like - data type of columns, the shape of the data(i.e the number of rows and columns) 
         """
-    
+        # print out the shape
+        print(f"The data has a shape of: {self.data.shape}")
+
+        # print out the column info
+        self.data.info()
+
     def basic_summary_statistics(self):
         """
         A function that generates 5 number summary(descriptive statistics) of the dataframe
