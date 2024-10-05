@@ -30,7 +30,20 @@ class EDAAnalyzer:
         """
         A function that generates 5 number summary(descriptive statistics) of the dataframe
         """
+        self.data.describe()
     
+    def missing_values(self):
+        """
+        A function that checks for columns with missing value and then returns ones with greater than 0 with the percentage of missing values.
+        """
+
+        # obtain missing value percentage
+        missing = self.data.isna().mean() * 100
+        missing = missing [missing > 0]
+        
+        # print out the result
+        print(f"These are columns with missing values greater than 0%:\n{missing}")
+
     def numerical_distribution(self):
         """
         A function that will give histogram plots of numerical data with a density curve that shows the distribution of data
