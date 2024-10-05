@@ -83,11 +83,11 @@ class EDAAnalyzer:
             axes[idx].set_ylabel("Frequency", fontsize=9)
 
             # add a lines for indicating the mean and median for the distribution
-            axes[idx].axvline(mean, color='black', linewidth=1) # the line to indicate the mean
-            axes[idx].axvline(median, color='red', linewidth=1) # the line to indivate the median 
+            axes[idx].axvline(mean, color='black', linewidth=1, label='Mean') # the line to indicate the mean
+            axes[idx].axvline(median, color='red', linewidth=1, label='Median') # the line to indivate the median 
 
             # add legends for the mean and median
-            axes[idx].legend({'Median': median, 'Mean': mean})
+            axes[idx].legend()
 
         # remove unused subplots
         for unused in range(idx + 1, len(axes)):
