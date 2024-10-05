@@ -26,7 +26,7 @@ class EDAAnalyzer:
         # print out the column info
         self.data.info()
 
-    def basic_summary_statistics(self):
+    def summary_statistics(self):
         """
         A function that generates 5 number summary(descriptive statistics) of the dataframe
         """
