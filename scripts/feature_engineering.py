@@ -10,8 +10,27 @@ class FeatureEngineering:
 
     @staticmethod
     def extract_date_features(data: pd.DataFrame, date_column : str = 'TransactionStartTime') -> pd.DataFrame:
-        """"""
+        """
+        A function that will breakdown the given date column into hour, day, month and year features.
 
+        Args:
+            data(pd.DataFrame): a dataframe containing the time/date column
+            date_column(str): the name of the column that contains the date feature, default is TransactionStartTime
+        Returns:
+            pd.DataFrame: the resulting data frame with the new date features
+        """
+
+        # convert the date data to a datetime object
+        data['TransactionStartTime'] = pd.to_datetime(data['TransactionStartTime'])
+
+        # break down the data
+        data['Hour'] = data['TransactionStartTime'].dt.hour
+        data['Day'] = data['TransactionStartTime'].dt.day
+        data['Month'] = data['TransactionStartTime'].dt.month
+        data['Year'] = data['TransactionStartTime'].dt.year
+
+        return data
+    
     @staticmethod
     def encode_categorical_data(data: pd.DataFrame, columns: List[str] = None) -> pd.DataFrame:
         """"""
