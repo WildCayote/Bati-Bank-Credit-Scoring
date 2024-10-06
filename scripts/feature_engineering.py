@@ -1,7 +1,7 @@
 from typing import List
 
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 class FeatureEngineering:
     """
@@ -38,6 +38,7 @@ class FeatureEngineering:
         Args:
             data(pd.DataFrame): a dataframe containing the time/date column
             date_column(str): the name of the column that contains the date feature, default is TransactionStartTime
+
         Returns:
             pd.DataFrame: the resulting data frame with the new date features
         """
@@ -56,14 +57,14 @@ class FeatureEngineering:
     @staticmethod
     def encode_categorical_data(data: pd.DataFrame) -> pd.DataFrame:
         """
-        A function that will encode the categorical data inside of the transcational dataset.
+        A function that encodes the categorical data of a given dataframe.
 
-        Args: 
-            data(pd.DataFrame): the dataframe whoes categorical data are going to be encoded
+        Args:
+            data(pd.DataFrame): the dataframe whose categorical data are going to be encoded
+        
         Returns:
             pd.DataFrame: the dataframe with its categorical data encoded
         """
-
         # apply the obtain_id function on id columns
         id_columns = ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId', 'ProviderId', 'ProductId', 'ChannelId']
         data[id_columns] = data[id_columns].map(FeatureEngineering.obtain_id)
@@ -86,6 +87,7 @@ class FeatureEngineering:
 
         Args:
             data(pd.DataFrame): the dataframe we want NA values to be removed from
+
         Returns:
             pd.DataFrame: the dataframe without NA values
         """
@@ -99,6 +101,7 @@ class FeatureEngineering:
 
         Args:
             data(pd.DataFrame): the data from which the customer data is going to be aggregated
+
         Returns:
             pd.DataFrame: a dataframe which contains the original data and the aggregated data
         """
@@ -118,6 +121,26 @@ class FeatureEngineering:
         return data
 
     @staticmethod
-    def normalize_numerical_features(data: pd.DataFrame, columns: List[str] = None) -> pd.DataFrame:
-        """"""
+    def normalize_numerical_features(data: pd.DataFrame) -> pd.DataFrame:
+        """
+        A function that normalizes numerical data.
 
+        **Note: Make sure to run this before categorical encoding, because normalizing categorical encodings is very wrong**
+
+        Args:
+            data(pd.DataFrame): the data whose numerical values are to be normalized
+        
+        Returns:
+            pd.DataFrame: the dataframe with normalized numerical columns
+        """
+
+        # obtain the numerical columns
+        numerical_columns = list(data._get_numeric_data().columns)
+
+        scaler = StandardScaler()
+        scaler = scaler.fit(data[numerical_columns])
+
+        # normalized data
+        data[numerical_columns] = scaler.transform(data[numerical_columns])
+
+        return data
