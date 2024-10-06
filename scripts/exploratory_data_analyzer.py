@@ -11,7 +11,7 @@ class EDAAnalyzer:
     """
     A class for organizing functions/methods for performing EDA on bank transaction data.
     """
-    def __init__(self, data: pd.DataFrame):
+    def __init__(self, data: pd.DataFrame) -> None:
         """
         Initialize the EDAAnalyzer class
 
@@ -20,7 +20,7 @@ class EDAAnalyzer:
         """
         self.data = data
     
-    def basic_overview(self):
+    def basic_overview(self) -> None:
         """
         A function that creates basic overview of the data like - data type of columns, the shape of the data(i.e the number of rows and columns) 
         """
@@ -30,13 +30,13 @@ class EDAAnalyzer:
         # print out the column info
         print(self.data.info())
 
-    def summary_statistics(self):
+    def summary_statistics(self) -> None:
         """
         A function that generates 5 number summary(descriptive statistics) of the dataframe
         """
         print(self.data.describe())
     
-    def missing_values(self):
+    def missing_values(self) -> None:
         """
         A function that checks for columns with missing value and then returns ones with greater than 0 with the percentage of missing values.
         """
@@ -48,7 +48,7 @@ class EDAAnalyzer:
         # print out the result
         print(f"These are columns with missing values greater than 0%:\n{missing}")
 
-    def numerical_distribution(self):
+    def numerical_distribution(self) -> None:
         """
         A function that will give histogram plots of numerical data with a density curve that shows the distribution of data
         """
@@ -101,7 +101,7 @@ class EDAAnalyzer:
         # show the plot
         plt.show()
 
-    def describe_skewness(self):
+    def describe_skewness(self) -> None:
         """
         A function that will describe the skewness of the numerical columns
         """
@@ -125,7 +125,7 @@ class EDAAnalyzer:
             value = skewness_data[columns[idx]]
             ax.text(x=x_coordinate, y=y_coordinate, s=value, ha='center', va='bottom', weight='bold')
 
-    def categorical_distribution(self):
+    def categorical_distribution(self) -> None:
         """
         A function that will give bar plots of categorical data
         """
@@ -170,7 +170,7 @@ class EDAAnalyzer:
         fig.suptitle(t="Distribution of Categorical Columns", weight='bold', fontsize=18)
         plt.tight_layout(pad=1)
     
-    def correlation_analysis(self):
+    def correlation_analysis(self) -> None:
         """
         A function that performs correlation analysis by creating heatmap plots between the numerical variabe;s
         """
@@ -182,7 +182,7 @@ class EDAAnalyzer:
         ax = sns.heatmap(correlation_matrix, cmap=cmap, annot=True)
         ax.set_title("Correlation Matrix Heatmap", weight='bold', fontsize=20, pad=20)
 
-    def outlire_detection(self):
+    def outlire_detection(self) -> None:
         """
         A function that performs outlire detection by plotting a box plot.
         """
@@ -192,7 +192,7 @@ class EDAAnalyzer:
         ax.set_xlabel("Numerical Columns", fontweight='bold', labelpad=10)
         ax.set_ylabel("Values", fontweight='bold', labelpad=10)
         
-    def count_outliers(self):
+    def count_outliers(self) -> None:
         """
         A function that counts the number of outliers in numerical columns. The amount of data that are outliers and also gives the cut-off point.
         The cut off points being defined as:
@@ -238,7 +238,7 @@ class EDAAnalyzer:
             value = outliers[outliers['Columns'] == columns[idx]]['Num. of Outliers'].values[0]
             ax.text(x=x_coordinate, y=y_coordinate, s=value, ha='center', va='bottom', weight='bold')
         
-    def fraud_analysis(self):
+    def fraud_analysis(self) -> None:
         """
         A function that obtains fraudilent transactions and bins them into 10 groups/bins and counts the amount of transaction within them
         """
