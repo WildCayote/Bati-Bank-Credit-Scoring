@@ -1,7 +1,9 @@
-import math
+import math, warnings
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+
+warnings.simplefilter(action="ignore")
 
 sns.set_theme()
 
@@ -127,5 +129,45 @@ class EDAAnalyzer:
         """
         A function that will give bar plots of categorical data
         """
+        # define the categorical columns that are worth investigating, 
+        # i.e avoid columns which hold ids because the information they provide when looking at their distribution isn't useful
+        columns_of_interest = ["CurrencyCode", "ProviderId", "ProductCategory", "ChannelId"]
 
+        # create subplots for each categorical variable
+        num_columns = math.ceil(len(columns_of_interest) ** 0.5)
+        num_rows = math.ceil(len(columns_of_interest) / num_columns) 
+
+        fig, axes = plt.subplots(ncols=num_columns, nrows=num_rows, figsize=(14,9))
+
+        axes = axes.flatten()
+
+        for idx, column in enumerate(columns_of_interest):
+            # group the data around that column and count instances with respective values
+            column_grouping = self.data.groupby(by=column)
+            grouping_counts = column_grouping.size().sort_values()
+
+            # create the bar plot
+            sns_plot = sns.barplot(data=grouping_counts, ax=axes[idx], palette='husl')
+            sns_plot.tick_params(axis='x', labelrotation=45)
+            sns_plot.set_ylabel(ylabel="Count", weight='bold')
+            sns_plot.set_xlabel(xlabel=column, weight='bold', loc='center', labelpad=5)
+
+            category_values = grouping_counts.keys()
+            for idx, patch in enumerate(sns_plot.patches):
+                # get the corrdinates to write the values 
+                x_coordinate = patch.get_x() + patch.get_width() / 2
+                y_coordinate = patch.get_height()
+
+                # get the value to be written
+                value = grouping_counts[category_values[idx]]
+                sns_plot.text(x=x_coordinate, y=y_coordinate, s=value, ha='center', va='bottom', weight='bold')
+
+
+        # clean up the unused plots
+        for unused in range(idx+1, len(columns_of_interest)):
+            plt.delaxes(ax=axes[unused])
+
+        fig.suptitle(t="Distribution of Categorical Columns", weight='bold', fontsize=18)
+        plt.tight_layout(pad=1)
+    
     
