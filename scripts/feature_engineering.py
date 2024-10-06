@@ -81,7 +81,16 @@ class FeatureEngineering:
 
     @staticmethod
     def handle_missing_data(data: pd.DataFrame) -> pd.DataFrame:
-        """"""
+        """
+        A function that will remove rows that have NA values.
+
+        Args:
+            data(pd.DataFrame): the dataframe we want NA values to be removed from
+        Returns:
+            pd.DataFrame: the dataframe without NA values
+        """
+
+        return data.dropna()
     
     @staticmethod
     def aggregate_customer_data(data: pd.DataFrame) -> pd.DataFrame:
