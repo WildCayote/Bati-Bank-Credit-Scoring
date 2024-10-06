@@ -237,3 +237,33 @@ class EDAAnalyzer:
             # get the value of the coordinate
             value = outliers[outliers['Columns'] == columns[idx]]['Num. of Outliers'].values[0]
             ax.text(x=x_coordinate, y=y_coordinate, s=value, ha='center', va='bottom', weight='bold')
+        
+    def fraud_analysis(self):
+        """
+        A function that obtains fraudilent transactions and bins them into 10 groups/bins and counts the amount of transaction within them
+        """
+
+        # group the data with the FraudResult
+        fraud_grouping = self.data.groupby(by='FraudResult')
+        fraud = fraud_grouping.get_group(name=1).sort_values(by='Amount', ascending=True)
+
+        # Define the number of bins
+        num_bins = 10
+
+        # Create quantile-based bins for Amount
+        quantile_bins_fraud, bin_edges = pd.qcut(fraud['Amount'], q=num_bins, duplicates='drop', retbins=True)
+
+        # Create formatted bin labels
+        bin_labels = [f"{int(bin_edges[i])} UGX - {int(bin_edges[i+1])} UGX" for i in range(len(bin_edges) - 1)]
+
+        # Replace the bin labels with formatted labels
+        quantile_bins_fraud = quantile_bins_fraud.cat.rename_categories(bin_labels)
+
+        # Count the occurrences in each bin
+        bin_counts = quantile_bins_fraud.value_counts().sort_index()
+
+        ax = sns.barplot(bin_counts,  palette='husl')
+        ax.set_title("Plot of Skewness values of Numerical Columns", pad=20, weight='bold', fontsize=15)
+        ax.set_xlabel("Transaction Amount Ranges", weight='bold')
+        ax.set_ylabel("Num. Frauds", weight="bold")
+        ax.tick_params(axis='x', labelrotation=60)
