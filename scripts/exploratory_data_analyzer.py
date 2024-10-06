@@ -267,3 +267,13 @@ class EDAAnalyzer:
         ax.set_xlabel("Transaction Amount Ranges", weight='bold')
         ax.set_ylabel("Num. Frauds", weight="bold")
         ax.tick_params(axis='x', labelrotation=60)
+
+        columns = bin_counts.keys()
+        for idx, patch in enumerate(ax.patches):
+            # get the corrdinates to write the values
+            x_coordinate = patch.get_x() + patch.get_width() / 2
+            y_coordinate = patch.get_height()
+
+            # get the value of the coordinate
+            value = bin_counts.get(columns[idx])
+            ax.text(x=x_coordinate, y=y_coordinate, s=value, ha='center', va='bottom', weight='bold')
