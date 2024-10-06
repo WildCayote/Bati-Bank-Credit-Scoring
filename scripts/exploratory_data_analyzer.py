@@ -99,15 +99,33 @@ class EDAAnalyzer:
         # show the plot
         plt.show()
 
+    def describe_skewness(self):
+        """
+        A function that will describe the skewness of the numerical columns
+        """
+        # obtain the skewness of the data
+        skewness_data = self.data.skew(numeric_only=True).sort_values().round(decimals=3)
+        columns = skewness_data.keys()
+
+        ax = sns.barplot(skewness_data, palette='husl')
+        ax.set_title("Plot of Skewness values of Numerical Columns", pad=20)
+        ax.set_xlabel("Numerical Columns", weight='bold')
+        ax.set_ylabel("Skewness", weight="bold")
+        ax.tick_params(axis='x', labelrotation=45)
+
+
+        for idx, patch in enumerate(ax.patches):
+            # get the corrdinates to write the values
+            x_coordinate = patch.get_x() + patch.get_width() / 2
+            y_coordinate = patch.get_height()
+
+            # get the value of the coordinate
+            value = skewness_data[columns[idx]]
+            ax.text(x=x_coordinate, y=y_coordinate, s=value, ha='center', va='bottom', weight='bold')
+
     def categorical_distribution(self):
         """
         A function that will give bar plots of categorical data
         """
 
-    def describe_skewness(self):
-        """
-        A function that will describe the skewness of the different columns
-        """
-
     
-
