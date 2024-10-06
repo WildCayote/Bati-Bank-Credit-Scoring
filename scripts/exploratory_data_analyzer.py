@@ -170,4 +170,19 @@ class EDAAnalyzer:
         fig.suptitle(t="Distribution of Categorical Columns", weight='bold', fontsize=18)
         plt.tight_layout(pad=1)
     
-    
+    def correlation_analysis(self):
+        """
+        A function that performs correlation analysis by creating heatmap plots between the numerical variabe;s
+        """
+        # calculate the correlation matrix
+        correlation_matrix = self.data._get_numeric_data().corr()
+
+        # plot it as a heatmap using seaborn
+        cmap = sns.color_palette("crest", as_cmap=True)
+        ax = sns.heatmap(correlation_matrix, cmap=cmap, annot=True)
+        ax.set_title("Correlation Matrix Heatmap", weight='bold', fontsize=20, pad=20)
+
+    def outlire_detection(self):
+        """
+        A function that performs outlire detection
+        """
