@@ -94,7 +94,28 @@ class FeatureEngineering:
     
     @staticmethod
     def aggregate_customer_data(data: pd.DataFrame) -> pd.DataFrame:
-        """"""
+        """
+        A function that aggregates a customers data from a transaction dataset and then adds the new data to the original data.
+
+        Args:
+            data(pd.DataFrame): the data from which the customer data is going to be aggregated
+        Returns:
+            pd.DataFrame: a dataframe which contains the original data and the aggregated data
+        """
+
+        # group and aggregate the data
+        customer_grouping = data.groupby(by="CustomerId")
+        customer_aggregation = customer_grouping.agg(
+            TotalTransaction = ('Amount', 'sum'),
+            AverageTransaction = ('Amount', 'mean'),
+            TransactionCount = ('TransactionId', 'count'),
+            StdTransaction = ('Amount', 'std')
+        )
+
+        # join the newly aggregated data with the previous data over the customerId
+        data = data.join(other=customer_aggregation, how='left', on='CustomerId')
+
+        return data
 
     @staticmethod
     def normalize_numerical_features(data: pd.DataFrame, columns: List[str] = None) -> pd.DataFrame:
