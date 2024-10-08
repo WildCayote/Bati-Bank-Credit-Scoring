@@ -61,3 +61,37 @@ def visualize_numerical_distribution(data: pd.DataFrame) -> None:
 
     # show the plot
     plt.show()    
+
+def plot_bar_chart_with_values(counts, title='Count of Risk Labels', xlabel='Risk Label', ylabel='Count', figsize=(8, 5)):
+    """
+    Plots a bar chart with values displayed on top of each bar, ensuring 'Good' is green and 'Bad' is red.
+
+    Parameters:
+    - counts: Pandas Series containing the counts for each category. Index should have 'Good' and 'Bad'.
+    - title: Title of the bar chart.
+    - xlabel: Label for the x-axis.
+    - ylabel: Label for the y-axis.
+    - figsize: Size of the figure.
+    """
+    # Define color mapping based on risk label
+    color_mapping = {'Good': 'green', 'Bad': 'red'}
+    bar_colors = [color_mapping.get(label, 'gray') for label in counts.index]
+
+    # Create the bar chart
+    plt.figure(figsize=figsize)
+    bars = counts.plot(kind='bar', color=bar_colors, alpha=0.7)
+
+    # Add the value on top of each bar
+    for bar in bars.patches:
+        yval = bar.get_height()  # Get the height of each bar
+        plt.text(bar.get_x() + bar.get_width() / 2, yval, int(yval), 
+                 ha='center', va='bottom', fontsize=12)  # Add text at the center-top of the bar
+
+    plt.title(title, weight='bold')
+    plt.xlabel(xlabel, weight='bold')
+    plt.ylabel(ylabel, weight='bold')
+    plt.xticks(rotation=0)
+    plt.grid(axis='y')
+
+    plt.show()
+
