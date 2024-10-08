@@ -46,8 +46,8 @@ def visualize_numerical_distribution(data: pd.DataFrame) -> None:
         axes[idx].set_ylabel("Frequency", fontsize=9)
 
         # add a lines for indicating the mean and median for the distribution
-        axes[idx].axvline(mean, color='black', linewidth=1, label='Mean') # the line to indicate the mean
-        axes[idx].axvline(median, color='red', linewidth=1, label='Median') # the line to indivate the median 
+        axes[idx].axvline(mean, color='black', linewidth=1, label=f'Mean = {round(mean , 2)}') # the line to indicate the mean
+        axes[idx].axvline(median, color='red', linewidth=1, label=f'Median = {round(median, 2)}') # the line to indivate the median 
 
         # add legends for the mean and median
         axes[idx].legend()
