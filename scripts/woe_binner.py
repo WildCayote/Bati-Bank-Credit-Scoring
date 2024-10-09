@@ -159,7 +159,7 @@ class WOE_Binner:
     
             # Calculate bad probability for each bin
             for bin, bin_counts in bins.items():
-                bad_count = bin_counts.get(0, 0)  # Count of bad (0) values in the current bin
+                bad_count = bin_counts.get('Bad')  # Count of bad (0) values in the current bin
                 total_count = sum(bin_counts.values())  # Total count of good + bad values in the bin
     
                 # Avoid division by zero
