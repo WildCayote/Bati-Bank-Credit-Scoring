@@ -114,3 +114,27 @@ class CreditScoreEngine:
         }).map(lambda x: float(x))
 
         return result
+
+    def label_rfms_score(self, data: pd.DataFrame, score_column: str='RFMS_Score') -> tuple[pd.DataFrame, float]:
+        """
+        A function that will lable RFMS scores as being 'Good' or 'Bad'. It uses the 55th quantile as the decision boundary.
+
+        Args:
+            data(pd.DataFrame): the dataframe that contains the RFMS scores
+            score_column(str): the name of the column that contains the RFMS score information
+
+        Returns:
+            pd.DataFrame: a new dataframe containing the labels of each RFMS scores in a new column called 'RiskLabel'
+            float: the value of the RFMS score used as a decision boundary.
+        """
+
+        # label the scores
+        values = pd.qcut(x=data[score_column], q=[0, 0.55, 1], labels=['Bad', 'Good'])
+
+        # add the score to the dataframe
+        data['RiskLabel'] = values
+
+        # determine the boundary
+        boundary = data[score_column].quantile(q=0.55)
+
+        return data, boundary
