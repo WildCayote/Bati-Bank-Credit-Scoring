@@ -95,3 +95,34 @@ def plot_bar_chart_with_values(counts, title='Count of Risk Labels', xlabel='Ris
 
     plt.show()
 
+def plot_iv_bar_chart(iv_values: dict):
+    """
+    Plots a bar chart of Information Value (IV) for each column, with the IV score displayed on top of each bar.
+
+    Args:
+        iv_values (dict): Dictionary with IV values for each column. 
+                          Structure: {column: iv_value}
+    """
+    # Create figure and axis
+    fig, ax = plt.subplots(figsize=(12, 6))
+    
+    # Extract columns and IV values
+    columns = list(iv_values.keys())
+    iv_scores = list(iv_values.values())
+    
+    # Create the bar chart
+    bars = ax.bar(columns, iv_scores, color='skyblue')
+
+    # Add IV scores on top of each bar
+    for bar, iv in zip(bars, iv_scores):
+        height = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width() / 2, height, f'{iv:.4f}', ha='center', va='bottom', fontsize=10, fontweight='bold')
+
+    # Set labels and title
+    ax.set_xlabel('Columns', fontsize=12)
+    ax.set_ylabel('Information Value (IV)', fontsize=12)
+    ax.set_title('Information Value (IV) by Column', fontsize=16, fontweight='bold')
+
+    plt.xticks(rotation=45, ha='right')  # Rotate column names for better readability
+    plt.tight_layout()
+    plt.show()

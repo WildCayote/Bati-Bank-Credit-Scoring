@@ -338,3 +338,47 @@ class WOE_Binner:
 
         plt.tight_layout()
         plt.show()
+        
+    @staticmethod
+    def calculate_iv_from_bins(counts: dict, woe_values: dict) -> dict:
+        """
+        Calculate Information Value (IV) for multiple columns based on their bins, good/bad counts, and WoE values.
+
+        Args:
+            counts (dict): Dictionary of good/bad counts for each bin of each column. 
+                           Structure: {column: {bin: {'Good': value, 'Bad': value}}}
+            woe_values (dict): Dictionary of WoE values for each bin of each column.
+                               Structure: {column: {bin: woe_value}}
+
+        Returns:
+            iv_values (dict): Dictionary with IV values for each column.
+        """
+        iv_values = {}
+
+        # Loop through each column
+        for column, bins in counts.items():
+            iv = 0  # Initialize IV for the column
+
+            # Get total Good and Bad counts for the column
+            total_good = sum(bin_counts['Good'] for bin_counts in bins.values())
+            total_bad = sum(bin_counts['Bad'] for bin_counts in bins.values())
+
+            # Loop through each bin in the column
+            for bin_label, bin_counts in bins.items():
+                good = bin_counts['Good']
+                bad = bin_counts['Bad']
+
+                # Calculate percentages of good and bad for the bin
+                good_perc = good / total_good if total_good > 0 else 0
+                bad_perc = bad / total_bad if total_bad > 0 else 0
+
+                # Get WoE for the bin
+                woe = woe_values[column].get(bin_label, 0)
+
+                # Calculate IV contribution for the bin
+                iv += (good_perc - bad_perc) * woe
+
+            # Store IV for the column
+            iv_values[column] = iv
+
+        return iv_values
