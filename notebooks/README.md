@@ -15,3 +15,7 @@ In this notebook I have included all my efforts of feature engineering. It conta
 ### 3. `user_value_analysis.ipynb`
 
 In this notebook I have included WOE binning and IV value investigation. It contains plots that show the difference of WOE values across different bins, IV value plots for every column. It also includes the interpretation and understanding of those plots and values.
+
+### 4. `model_training.ipynb`
+
+In this notebook I have included my efforts to train different classification model and then choose the best amongst them. I used grid search to choose the best parameters for the model.
