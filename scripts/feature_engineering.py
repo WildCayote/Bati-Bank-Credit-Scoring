@@ -55,7 +55,7 @@ class FeatureEngineering:
         return data
     
     @staticmethod
-    def encode_categorical_data(data: pd.DataFrame) -> pd.DataFrame:
+    def encode_categorical_data(data: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
         """
         A function that encodes the categorical data of a given dataframe.
 
@@ -63,22 +63,24 @@ class FeatureEngineering:
             data(pd.DataFrame): the dataframe whose categorical data are going to be encoded
         
         Returns:
-            pd.DataFrame: the dataframe with its categorical data encoded
+            tuple: the dataframe with its categorical data encoded and a dict containing encoders
         """
         # apply the obtain_id function on id columns
         id_columns = ['TransactionId', 'BatchId', 'AccountId', 'SubscriptionId', 'CustomerId', 'ProviderId', 'ProductId', 'ChannelId']
         data[id_columns] = data[id_columns].map(FeatureEngineering.obtain_id)
 
         # now use sklearn's label encoder for the remaining categorical data
-        remaining_categorical_cols = data.select_dtypes(include=['object']).columns
+        remaining_categorical_cols = data.select_dtypes(include=['object', 'category']).columns
 
         # go throught the columns and train and use the LabelEncoder for each of them
+        encoders = {}
         encoder = LabelEncoder()
         for column in remaining_categorical_cols:
             col_encoder = encoder.fit(data[column])
             data[column] = col_encoder.transform(data[column])
+            encoders[column] = encoder
 
-        return data
+        return data, encoders
 
     @staticmethod
     def handle_missing_data(data: pd.DataFrame) -> pd.DataFrame:
@@ -121,7 +123,7 @@ class FeatureEngineering:
         return data
 
     @staticmethod
-    def normalize_numerical_features(data: pd.DataFrame) -> pd.DataFrame:
+    def normalize_numerical_features(data: pd.DataFrame) -> tuple[pd.DataFrame, StandardScaler]:
         """
         A function that normalizes numerical data.
 
@@ -143,4 +145,4 @@ class FeatureEngineering:
         # normalized data
         data[numerical_columns] = scaler.transform(data[numerical_columns])
 
-        return data
+        return data, scaler

@@ -5,5 +5,4 @@ pandas
 matplotlib
 seaborn
 scikit-learn
-scorecardpy
-monotonic-binning
+imbalanced-learn
