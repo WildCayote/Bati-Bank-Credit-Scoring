@@ -70,7 +70,7 @@ class FeatureEngineering:
         data[id_columns] = data[id_columns].map(FeatureEngineering.obtain_id)
 
         # now use sklearn's label encoder for the remaining categorical data
-        remaining_categorical_cols = data.select_dtypes(include=['object']).columns
+        remaining_categorical_cols = data.select_dtypes(include=['object', 'category']).columns
 
         # go throught the columns and train and use the LabelEncoder for each of them
         encoder = LabelEncoder()
