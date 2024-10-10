@@ -276,3 +276,65 @@ class WOE_Binner:
 
         plt.tight_layout()
         plt.show()
+    
+    @staticmethod
+    def plot_multiple_woe_data(plotting_data_list: list, column_names: list, n_cols: int):
+        """
+        Plots the distribution of Good and Bad loan counts, along with WoE and Bad Probability, for multiple columns in a grid layout.
+
+        Args:
+            plotting_data_list (list): A list of DataFrames containing the data for plotting.
+            column_names (list): A list of column names corresponding to the data.
+            n_cols (int): Number of columns in the subplot grid.
+
+        Returns:
+            A plot with subplots showing the count distribution of Good and Bad loans (as bar plots), WoE (as a blue line), and Bad Probability (as a red line) for multiple columns.
+        """
+        n_rows = int(np.ceil(len(column_names) / n_cols))  # Calculate the number of rows
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=(10 * n_cols, 10 * n_rows))
+        axes = axes.flatten()  # Flatten the axes array to easily iterate over it
+
+        for i, (plotting_data, column_name) in enumerate(zip(plotting_data_list, column_names)):
+            ax1 = axes[i]
+
+            bar_width = 0.4
+            index = np.arange(len(plotting_data['bins']))  # Use the range for index
+
+            # Create bar plots for Good and Bad counts
+            bar1 = ax1.bar(index - bar_width/2, plotting_data['good_count'], width=bar_width, label='Good', color='lightgreen')
+            bar2 = ax1.bar(index + bar_width/2, plotting_data['bad_count'], width=bar_width, label='Bad', color='lightcoral')
+
+            ax1.set_xlabel(f'{column_name} Bins')
+            ax1.set_ylabel('Count Distribution')
+            ax1.set_title(f'{column_name}', weight='bold', fontsize=14)
+            ax1.legend(loc='upper right')
+
+            # Adding WoE line
+            ax2 = ax1.twinx()
+            ax2.plot(index, plotting_data['woe'], color='blue', marker='o', label='WoE', linewidth=2)
+            ax2.set_ylabel('WoE', color='blue')
+
+            # Annotate WoE values on the line
+            for j, woe in enumerate(plotting_data['woe']):
+                ax2.text(index[j], woe, f'{woe:.2f}', color='blue', ha='center', fontsize=8)
+
+            # Adding Bad Probability
+            ax3 = ax1.twinx()
+            ax3.spines['right'].set_position(('outward', 60))  # Move the third y-axis outwards
+            ax3.plot(index, plotting_data['bad_probability'], color='red', marker='s', label='Bad Probability', linewidth=2)
+            ax3.set_ylabel('Bad Probability', color='red')
+
+            # Annotate Bad Probability values on the line
+            for j, prob in enumerate(plotting_data['bad_probability']):
+                ax3.text(index[j], prob, f'{prob:.2f}', color='red', ha='center', fontsize=8)
+
+            # Set custom x-tick labels using the 'bins' column
+            ax1.set_xticks(index)
+            ax1.set_xticklabels(plotting_data['bins'], rotation=45, ha='right')
+
+        # Remove any unused subplots
+        for i in range(len(column_names), len(axes)):
+            fig.delaxes(axes[i])
+
+        plt.tight_layout()
+        plt.show()
